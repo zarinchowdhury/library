@@ -1,0 +1,54 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+
+public class LibraryGUI extends JFrame {
+    private LibraryManager libraryManager;
+
+    public LibraryGUI() {
+        libraryManager = new LibraryManager();
+
+        setTitle("Library Management System");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2));
+
+        JLabel memberIdLabel = new JLabel("Member ID:");
+        JTextField memberIdField = new JTextField();
+        JLabel bookIdLabel = new JLabel("Book ID:");
+        JTextField bookIdField = new JTextField();
+        JButton borrowButton = new JButton("Borrow");
+
+        borrowButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int memberId = Integer.parseInt(memberIdField.getText());
+                int bookId = Integer.parseInt(bookIdField.getText());
+                Date borrowDate = new Date(System.currentTimeMillis()); // Current date
+                boolean success = libraryManager.borrowBook(memberId, bookId, borrowDate);
+                if (success) {
+                    JOptionPane.showMessageDialog(null, "Book borrowed successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to borrow book.");
+                }
+            }
+        });
+
+        panel.add(memberIdLabel);
+        panel.add(memberIdField);
+        panel.add(bookIdLabel);
+        panel.add(bookIdField);
+        panel.add(new JLabel()); // Empty label for layout
+        panel.add(borrowButton);
+
+        add(panel);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new LibraryGUI();
+    }
+}
+
